@@ -1,75 +1,34 @@
 package com.example.eatswunee_bistro;
 
-import static android.content.ContentValues.TAG;
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-//import android.support.v4.widget.DrawerLayout;
-import androidx.drawerlayout.widget.DrawerLayout;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
-//import android.widget.Toolbar;
 import androidx.appcompat.widget.Toolbar;
-
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity {
-
+public class BistroDoneActivity extends AppCompatActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        //더미 데이터 생성
-        ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            list.add("Test Data" + i);
-        }
-
-        //리사이클러뷰에 linearlayoutmanager 객체 지정
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        //리사이클러뷰에 Adapter 객체 지정
-        CustomAdapter adapter = new CustomAdapter(list);
-        recyclerView.setAdapter(adapter);
+        setContentView(R.layout.bistro_done);
 
         this.settingSideNavBar();
-
-        //알림 툴바 설정
-        Toolbar toolbar = findViewById(R.id.action_category);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate (R.menu.toolbar_item, menu);
+        getMenuInflater ().inflate (R.menu.toolbar_item, menu);
+
         return true;
     }
 
@@ -81,24 +40,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity (new Intent (this, WaitingActivity.class));
                 return true;
             case R.id.menu_list:
-                startActivity (new Intent (this, BistroDoneActivity.class));
                 return true;
             case R.id.menu_money:
-                startActivity (new Intent (this, BistroMoneyActivity.class));
                 return true;
             case R.id.action_category:
-                Intent NewActivity = new Intent(getApplicationContext(), BistroAlarmActivity.class);
-                startActivity(NewActivity);
                 return true;
             default:
                 return super.onOptionsItemSelected (item);
         }
     }
-    /***
-     *  -> 사이드 네브바 세팅
-     *   - 클릭 아이콘 설정
-     *   - 아이템 클릭 이벤트 설정
-     */
+
     public void settingSideNavBar()
     {
         // 툴바 생성
@@ -114,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
-                MainActivity.this,
+                BistroDoneActivity.this,
                 drawLayout,
                 toolbar,
                 R.string.open,
@@ -159,21 +110,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-/***
- *  -> 뒤로가기시, 사이드 네브바 닫는 기능
- */
-        @Override
-        public void onBackPressed() {
-            DrawerLayout drawer = findViewById(R.id.drawer);
-            if (drawer.isDrawerOpen(androidx.core.view.GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            } else {
-                super.onBackPressed();
-            }
+    /***
+     *  -> 뒤로가기시, 사이드 네브바 닫는 기능
+     */
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer);
+        if (drawer.isDrawerOpen(androidx.core.view.GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
-
-        //커스텀 리스너 객체 생성 및 전달
-    //클릭 이벤트
-
+    }
 }
-
