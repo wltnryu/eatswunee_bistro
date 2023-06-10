@@ -1,6 +1,7 @@
 package com.example.eatswunee_bistro;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 if (pos != RecyclerView.NO_POSITION)
                 {
                     //click event
+
                 }
             }
         });

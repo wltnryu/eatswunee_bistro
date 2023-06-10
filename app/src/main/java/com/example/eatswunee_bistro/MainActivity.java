@@ -2,6 +2,10 @@ package com.example.eatswunee_bistro;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -58,21 +62,47 @@ public class MainActivity extends AppCompatActivity {
         this.settingSideNavBar();
 
         //알림 툴바 설정
-        Toolbar toolbar = findViewById(R.id.action_category);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.bistro_toolbar);
+        //setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        
+        //커스텀 어댑터를 선언해준뒤 인자 값을 이용해서 setOnItemClickListener쓰기
+        CustomAdapter adapter1 = new CustomAdapter(list);
+        //커스텀 리스너 객체 생성 및 전달
+        //클릭 이벤트
+        adapter1.setOnItemClickListener(new CustomAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                Intent intent = new Intent (MainActivity.this, BistroOrderActivity.class);
+                intent.putExtra("SelectedItem", pos);
+                launcher.launch(intent);
+            }
+        });
     }
 
+
+    //launcher 선언
+    //startActivityForResult 대체
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK)
+                    {
+                        Intent intent = result.getData();
+                    }
+                }
+            });
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate (R.menu.toolbar_item, menu);
         return true;
     }
-
+    
+    //메뉴바 열었을 때 메뉴바 안의 이벤트들
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -171,9 +201,5 @@ public class MainActivity extends AppCompatActivity {
                 super.onBackPressed();
             }
         }
-
-        //커스텀 리스너 객체 생성 및 전달
-    //클릭 이벤트
-
 }
 

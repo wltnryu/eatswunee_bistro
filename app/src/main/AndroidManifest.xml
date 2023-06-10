@@ -23,6 +23,10 @@
         <activity android:name=".WaitingActivity" />
         <activity android:name=".BistroDoneActivity" />
         <activity android:name=".BistroMoneyActivity" />
+        <activity android:name=".BistroAlarmActivity" />
+        <activity android:name=".BistroOrderActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
