@@ -13,7 +13,7 @@
 
             <TextView
                 android:id="@+id/order"
-                android:layout_width="70dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
@@ -27,7 +27,7 @@
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:layout_marginRight="130dp"
+                android:layout_marginRight="110dp"
                 android:text="197"
                 android:textSize="18sp"
                 android:textColor="#F56714"
@@ -37,11 +37,10 @@
                 android:id="@+id/date"
                 android:layout_width="127dp"
                 android:layout_height="wrap_content"
-                android:gravity="right"
                 android:layout_marginTop="13dp"
                 android:text="2023..3.27 11:45"
-                android:textSize="14sp"
-                android:textColor="#808E3B0B"/>
+                android:textColor="#808E3B0B"
+                android:textSize="14sp" />
 
         </LinearLayout>
 

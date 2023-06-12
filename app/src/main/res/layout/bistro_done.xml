@@ -14,15 +14,6 @@
         tools:context=".BistroDoneActivity">
         <include layout="@layout/bistro_appbar" />
 
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start|left"
-            app:headerLayout="@layout/appbar_header"
-            app:menu="@menu/menu_toolbar" />
-
-    </androidx.drawerlayout.widget.DrawerLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,4 +50,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start|left"
+            app:headerLayout="@layout/appbar_header"
+            app:menu="@menu/menu_toolbar" />
+    </androidx.drawerlayout.widget.DrawerLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

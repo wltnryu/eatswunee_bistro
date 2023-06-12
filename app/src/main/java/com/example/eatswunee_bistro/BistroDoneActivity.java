@@ -1,6 +1,7 @@
 package com.example.eatswunee_bistro;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,14 +14,36 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
 
 public class BistroDoneActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bistro_done);
+
+        //더미데이터 생성
+        ArrayList<String> testDataSet = new ArrayList<>();
+        for (int i = 0; i<20; i++) {
+            testDataSet.add("TestData" + i);
+        }
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager((Context) this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        BistroDoneAdapter bistroDoneAdapter = new BistroDoneAdapter(testDataSet);
+        recyclerView.setAdapter(bistroDoneAdapter);
+
+        //리사이클러뷰 아이템 간격 조정
+        RecyclerItemDecoActivity decoraion_height = new RecyclerItemDecoActivity(20);
+        recyclerView.addItemDecoration(decoraion_height);
 
         this.settingSideNavBar();
     }
@@ -44,6 +67,7 @@ public class BistroDoneActivity extends AppCompatActivity {
             case R.id.menu_money:
                 return true;
             case R.id.action_category:
+                startActivity (new Intent(this, BistroAlarmActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected (item);

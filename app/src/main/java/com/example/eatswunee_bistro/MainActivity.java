@@ -59,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         CustomAdapter adapter = new CustomAdapter(list);
         recyclerView.setAdapter(adapter);
 
+        //리사이클러뷰 아이템 간격 조정
+        RecyclerItemDecoActivity decoraion_height = new RecyclerItemDecoActivity(20);
+                recyclerView.addItemDecoration(decoraion_height);
+
         this.settingSideNavBar();
 
         //알림 툴바 설정
@@ -69,10 +73,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         
         //커스텀 어댑터를 선언해준뒤 인자 값을 이용해서 setOnItemClickListener쓰기
-        CustomAdapter adapter1 = new CustomAdapter(list);
+        //CustomAdapter adapter1 = new CustomAdapter(list);
         //커스텀 리스너 객체 생성 및 전달
         //클릭 이벤트
-        adapter1.setOnItemClickListener(new CustomAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new CustomAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int pos) {
                 Intent intent = new Intent (MainActivity.this, BistroOrderActivity.class);

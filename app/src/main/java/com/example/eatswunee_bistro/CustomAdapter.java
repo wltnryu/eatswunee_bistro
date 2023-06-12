@@ -34,17 +34,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             textView4 = itemView.findViewById(R.id.menu_name);
             textView5 = itemView.findViewById(R.id.menu_num);
 
-            //추가내용
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pos = getAdapterPosition();
-                    if (pos != RecyclerView.NO_POSITION)
-                    {
-                        mListener.onItemClick(view, pos);
-                    }
-                }
-            });
+//            //추가내용
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    int pos = getAdapterPosition();
+//                    if (pos != RecyclerView.NO_POSITION)
+//                    {
+//                        mListener.onItemClick(view, pos);
+//                    }
+//                }
+//            });
         }
     }
 

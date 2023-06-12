@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +25,17 @@ public class BistroMoneyActivity extends AppCompatActivity {
         setContentView(R.layout.bistro_money);
 
         this.settingSideNavBar();
+
+        //확인 버튼 클릭시 화면 전환
+        Button button = (Button) findViewById(R.id.button_money);
+        button.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -44,6 +57,7 @@ public class BistroMoneyActivity extends AppCompatActivity {
             case R.id.menu_money:
                 return true;
             case R.id.action_category:
+                startActivity (new Intent(this, BistroAlarmActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected (item);
