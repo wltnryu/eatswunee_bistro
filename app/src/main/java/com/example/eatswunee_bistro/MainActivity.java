@@ -1,44 +1,51 @@
 package com.example.eatswunee_bistro;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 //import android.support.v4.widget.DrawerLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 //import android.widget.Toolbar;
 import androidx.appcompat.widget.Toolbar;
 
 
+import com.example.eatswunee_bistro.api.Data;
+import com.example.eatswunee_bistro.api.Example;
+import com.example.eatswunee_bistro.api.Result;
+import com.example.eatswunee_bistro.api.RetrofitClient;
+import com.example.eatswunee_bistro.api.ServiceApi;
 import com.google.android.material.navigation.NavigationView;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private CustomAdapter customAdapter;
+
+    private RetrofitClient retrofitClient;
+    private ServiceApi serviceApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,18 +53,38 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //더미 데이터 생성
-        ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            list.add("Test Data" + i);
-        }
+        //서버통신
+//        ArrayList<String> list = new ArrayList<>();
+//        for (int i = 0; i < 100; i++) {
+//            list.add("" + i);
+//        }
 
         //리사이클러뷰에 linearlayoutmanager 객체 지정
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //리사이클러뷰에 Adapter 객체 지정
-        CustomAdapter adapter = new CustomAdapter(list);
-        recyclerView.setAdapter(adapter);
+        //리사이클러뷰 api 통신
+        retrofitClient = RetrofitClient.getInstance();
+        serviceApi = RetrofitClient.getRetrofitInterface();
+
+        serviceApi.getBistro(1).enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                Result result = response.body();
+                Data data = result.getData();
+                Log.d("retrofit", "Data fetch success");
+                customAdapter = new CustomAdapter(data.getOrdersList());
+
+                recyclerView.setAdapter(customAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                Log.d("retrofit", t.getMessage());
+            }
+        });
+
+
 
         //리사이클러뷰 아이템 간격 조정
         RecyclerItemDecoActivity decoraion_height = new RecyclerItemDecoActivity(20);
@@ -76,14 +103,14 @@ public class MainActivity extends AppCompatActivity {
         //CustomAdapter adapter1 = new CustomAdapter(list);
         //커스텀 리스너 객체 생성 및 전달
         //클릭 이벤트
-        adapter.setOnItemClickListener(new CustomAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int pos) {
-                Intent intent = new Intent (MainActivity.this, BistroOrderActivity.class);
-                intent.putExtra("SelectedItem", pos);
-                launcher.launch(intent);
-            }
-        });
+//        customAdapter.setOnItemClickListener(new CustomAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View v, int pos) {
+//                Intent intent = new Intent (MainActivity.this, BistroOrderActivity.class);
+//                intent.putExtra("SelectedItem", pos);
+//                launcher.launch(intent);
+//            }
+//        });
     }
 
 

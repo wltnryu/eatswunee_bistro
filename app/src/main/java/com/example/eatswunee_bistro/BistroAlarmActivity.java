@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,10 +20,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eatswunee_bistro.api.Data;
+import com.example.eatswunee_bistro.api.Result;
+import com.example.eatswunee_bistro.api.RetrofitClient;
+import com.example.eatswunee_bistro.api.ServiceApi;
+
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BistroAlarmActivity extends AppCompatActivity {
 
+    private RecyclerView recyclerView;
+    private AlarmAdapter alarmAdapter;
+    private RetrofitClient retrofitClient;
+    private ServiceApi serviceApi;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,19 +49,41 @@ public class BistroAlarmActivity extends AppCompatActivity {
                 finish();
             }
         });
-        //더미 데이터 생성
-        ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            list.add("Test Data" + i);
-        }
+//        //더미 데이터 생성
+//        ArrayList<String> list = new ArrayList<>();
+//        for (int i = 0; i < 100; i++) {
+//            list.add("Test Data" + i);
+//        }
 
         //리사이클러뷰에 linearlayoutmanager 객체 지정
         RecyclerView recyclerView = findViewById(R.id.a_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        //리사이클러뷰 api 통신
+        retrofitClient = RetrofitClient.getInstance();
+        serviceApi = RetrofitClient.getRetrofitInterface();
+
+        serviceApi.getBistro3(1).enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                Result result = response.body();
+                Data data = result.getData();
+                Log.d("retrofit", "Data fetch success");
+                alarmAdapter = new AlarmAdapter(data.getOrdersList());
+
+                recyclerView.setAdapter(alarmAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                Log.d("retrofit", t.getMessage());
+            }
+        });
+
+
         //리사이클러뷰에 Adapter 객체 지정
-        AlarmAdapter adapter = new AlarmAdapter(list);
-        recyclerView.setAdapter(adapter);
+        //AlarmAdapter adapter = new AlarmAdapter(list);
+        //recyclerView.setAdapter(adapter);
 
         //리사이클러뷰 아이템 간격 조정
         RecyclerItemDecoActivity decoraion_height = new RecyclerItemDecoActivity(20);
@@ -63,17 +99,17 @@ public class BistroAlarmActivity extends AppCompatActivity {
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //커스텀 어댑터를 선언해준뒤 인자 값을 이용해서 setOnItemClickListener쓰기
-        AlarmAdapter adapter1 = new AlarmAdapter(list);
+        //AlarmAdapter adapter1 = new AlarmAdapter(list);
         //커스텀 리스너 객체 생성 및 전달
         //클릭 이벤트
-        adapter1.setOnItemClickListener(new CustomAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int pos) {
-                Intent intent = new Intent(BistroAlarmActivity.this, BistroOrderActivity.class);
-                intent.putExtra("SelectedItem", pos);
-                launcher.launch(intent);
-            }
-        });
+//        adapter1.setOnItemClickListener(new CustomAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View v, int pos) {
+//                Intent intent = new Intent(BistroAlarmActivity.this, BistroOrderActivity.class);
+//                intent.putExtra("SelectedItem", pos);
+//                launcher.launch(intent);
+//            }
+//        });
     }
     //launcher 선언
     //startActivityForResult 대체

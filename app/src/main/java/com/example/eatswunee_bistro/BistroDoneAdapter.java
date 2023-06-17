@@ -1,6 +1,7 @@
 package com.example.eatswunee_bistro;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,90 +10,94 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eatswunee_bistro.api.menus;
+import com.example.eatswunee_bistro.api.orders;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BistroDoneAdapter extends RecyclerView.Adapter<BistroDoneAdapter.ViewHolder> {
-    private ArrayList<String> mData = null;
+    private List<orders> items;
+
+    public BistroDoneAdapter(List<orders> items) {this.items = items;}
 
     //아이템 뷰를 저장하는 뷰 홀더 클래스
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView textView1;
-        TextView textView2;
-        TextView textView3;
-        TextView textView4;
-        TextView textView5;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView order_num, menu_name, menu_cnt;
+        CustomAdapter.ServiceItemClickListener serviceItemClickListener;
 
         ViewHolder(View itemView) {
             super(itemView);
 
             //뷰 객체에 대한 참조
-            textView1 = itemView.findViewById(R.id.order);
-            textView2 = itemView.findViewById(R.id.order_num);
-            textView3 = itemView.findViewById(R.id.date);
-            textView4 = itemView.findViewById(R.id.menu_name);
-            textView5 = itemView.findViewById(R.id.menu_num);
+            order_num = itemView.findViewById(R.id.order_num);
+            menu_name = itemView.findViewById(R.id.menu_name);
+            menu_cnt = itemView.findViewById(R.id.menu_cnt);
 
-            //추가내용
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pos = getAdapterPosition();
-                    if (pos != RecyclerView.NO_POSITION)
-                    {
-                        mListener.onItemClick(view, pos);
-                    }
-                }
-            });
+            itemView.setOnClickListener((View.OnClickListener) this);
+        }
+        //api 통신
+        public void setItem(orders item) {
+            menu_name.setText(item.getMenuName());
+            menu_cnt.setText(item.getMenuCnt());
         }
     }
 
-    //생성자에게 데이터 리스트 객체를 전달받음
-    BistroDoneAdapter(ArrayList<String> list) {
-        mData = list;
+        //onCreateViewHolder() - 아이템 뷰를 위한 뷰 홀더 객체 생성하여 리턴
+        @Override
+        public BistroDoneAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            Context context = parent.getContext();
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            View view = inflater.inflate(R.layout.recyclerview_item, parent, false);
+            BistroDoneAdapter.ViewHolder vh = new BistroDoneAdapter.ViewHolder(view);
+
+            return vh;
+        }
+
+        //onBindViewHolder - position에 해당하는 데이터를 뷰 홀더의 아이템뷰에 표시
+        @Override
+        public void onBindViewHolder(BistroDoneAdapter.ViewHolder holder, int position) {
+            orders item = items.get(position);
+            holder.setItem(item);
+
+            holder.serviceItemClickListener = new CustomAdapter.ServiceItemClickListener() {
+                @Override
+                public void onItemClickListener(View v, int position) {
+                    Intent intent = new Intent(v.getContext(), BistroDoneActivity.class);
+                    v.getContext().startActivity(intent);
+                }
+            };
+        }
+
+        //getItemCount 전체 데이터 개수 리턴
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        //커스텀 리스너 인터페이스
+        public interface OnItemClickListener {
+            void onItemClick(View v, int pos);
+        }
+
+    //serviceitemClickListener 인터페이스
+    public interface ServiceItemClickListener{
+        void onItemClickListener(View v, int position);
     }
 
-    //onCreateViewHolder() - 아이템 뷰를 위한 뷰 홀더 객체 생성하여 리턴
-    @Override
-    public BistroDoneAdapter.ViewHolder onCreateViewHolder(ViewGroup  parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //리스너 객체 참조를 저장하는 변수
+        private OnItemClickListener mListener = null;
 
-        View view = inflater.inflate(R.layout.recyclerview_item, parent, false);
-        BistroDoneAdapter.ViewHolder vh = new BistroDoneAdapter.ViewHolder(view);
+        public void setOnItemClickListener(OnItemClickListener listener) {
+            this.mListener = listener;
+        }
 
-        return vh;
+
+        //ViewHolder에서 클릭 시 동작 호출
+
     }
 
-    //onBindViewHolder - position에 해당하는 데이터를 뷰 홀더의 아이템뷰에 표시
-    @Override
-    public void onBindViewHolder(BistroDoneAdapter.ViewHolder holder, int position) {
-        String text = mData.get(position);
-        holder.textView1.setText(text);
-    }
-
-    //getItemCount 전체 데이터 개수 리턴
-    @Override
-    public int getItemCount() {
-        return mData.size();
-    }
-
-    //커스텀 리스너 인터페이스
-    public interface OnItemClickListener
-    {
-        void onItemClick(View v, int pos);
-    }
-
-    //리스너 객체 참조를 저장하는 변수
-    private OnItemClickListener mListener = null;
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.mListener = listener;
-    }
-
-
-    //ViewHolder에서 클릭 시 동작 호출
-
-}
 

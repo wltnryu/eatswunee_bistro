@@ -82,7 +82,7 @@
                 android:layout_width="127dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="13dp"
-                android:layout_marginLeft="250dp"
+                android:layout_marginLeft="230dp"
                 android:gravity="right"
                 android:text="2023..3.27 11:45"
                 android:textColor="#808E3B0B"

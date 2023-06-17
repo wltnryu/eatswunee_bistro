@@ -3,10 +3,12 @@ package com.example.eatswunee_bistro;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,9 +18,21 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.eatswunee_bistro.api.Data;
+import com.example.eatswunee_bistro.api.Result;
+import com.example.eatswunee_bistro.api.RetrofitClient;
+import com.example.eatswunee_bistro.api.ServiceApi;
 import com.google.android.material.navigation.NavigationView;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class BistroMoneyActivity extends AppCompatActivity {
+
+    private RetrofitClient retrofitClient;
+    private ServiceApi serviceApi;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +48,26 @@ public class BistroMoneyActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        //리사이클러뷰 api 통신
+        retrofitClient = RetrofitClient.getInstance();
+        serviceApi = RetrofitClient.getRetrofitInterface();
+
+        serviceApi.getBistro4(1).enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                Result result = response.body();
+                Data data = result.getData();
+                Log.d("retrofit", "Data fetch success");
+                TextView today_revenue = findViewById(R.id.today_revenue);
+                TextView total_revenue = findViewById(R.id.total_revenue);
+            }
+
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                Log.d("retrofit", t.getMessage());
             }
         });
     }

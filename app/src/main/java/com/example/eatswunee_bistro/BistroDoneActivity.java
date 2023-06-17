@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,29 +18,65 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eatswunee_bistro.api.Data;
+import com.example.eatswunee_bistro.api.Result;
+import com.example.eatswunee_bistro.api.RetrofitClient;
+import com.example.eatswunee_bistro.api.ServiceApi;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class BistroDoneActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private BistroDoneAdapter bistroDoneAdapter;
+    private RetrofitClient retrofitClient;
+    private ServiceApi serviceApi;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bistro_done);
 
-        //더미데이터 생성
-        ArrayList<String> testDataSet = new ArrayList<>();
-        for (int i = 0; i<20; i++) {
-            testDataSet.add("TestData" + i);
-        }
+//        //더미데이터 생성
+//        ArrayList<String> testDataSet = new ArrayList<>();
+//        for (int i = 0; i<20; i++) {
+//            testDataSet.add("TestData" + i);
+//        }
 
+        //리사이클러뷰에 linearlayoutmanager 객체 지정
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //리사이클러뷰 api 통신
+        retrofitClient = RetrofitClient.getInstance();
+        serviceApi = RetrofitClient.getRetrofitInterface();
+
+        serviceApi.getBistro1(1).enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                Result result = response.body();
+                Data data = result.getData();
+                Log.d("retrofit", "Data success");
+                bistroDoneAdapter = new BistroDoneAdapter(data.getOrdersList());
+                recyclerView.setAdapter(bistroDoneAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+
+            }
+        });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager((Context) this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        BistroDoneAdapter bistroDoneAdapter = new BistroDoneAdapter(testDataSet);
-        recyclerView.setAdapter(bistroDoneAdapter);
+        //BistroDoneAdapter bistroDoneAdapter = new BistroDoneAdapter(testDataSet);
+        //recyclerView.setAdapter(bistroDoneAdapter);
 
         //리사이클러뷰 아이템 간격 조정
         RecyclerItemDecoActivity decoraion_height = new RecyclerItemDecoActivity(20);
