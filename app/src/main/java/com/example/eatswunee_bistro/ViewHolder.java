@@ -13,7 +13,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     ViewHolder(Context context, View itemView) {
         super(itemView);
 
-        textView = itemView.findViewById(R.id.textView);
+        //textView = itemView.findViewById(R.id.te);
 
         //클릭 시 이벤트 추가
         itemView.setOnClickListener(new View.OnClickListener() {

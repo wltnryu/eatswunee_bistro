@@ -35,8 +35,9 @@ public class BistroOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bistro_order);
 
-        ImageButton imageButton = findViewById(R.id.imageButton2);
-        imageButton.setOnClickListener(new View.OnClickListener() {
+        //ImageButton imageButton = findViewById(R.id.imageButton2);
+        Button imagebutton = findViewById(R.id.button3);
+        imagebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);

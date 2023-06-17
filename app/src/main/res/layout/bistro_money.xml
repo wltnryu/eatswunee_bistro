@@ -22,28 +22,32 @@
         android:layout_marginTop="300dp"
         android:text="오늘의 매출 : "
         android:textColor="#8E3B0B"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/today_revenue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="130dp"
-        android:layout_marginTop="350dp"
-        android:text="XXX,XXX"
-        android:textSize="34sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/today_revenue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="350dp"
+            android:text="XXX,XXX"
+            android:textColor="#F56714"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="270dp"
-        android:layout_marginTop="370dp"
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="380dp"
         android:text="원"
         android:textColor="#45210D"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,6 +58,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="460dp"
         android:text="총 매출 : "
+        android:textSize="15sp"
         android:textColor="#45210D"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -63,10 +68,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="170dp"
-        android:layout_marginTop="450dp"
+        android:layout_marginTop="460dp"
         android:text="X,XXX,XXX"
         android:textColor="#45210D"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -74,9 +79,10 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="290dp"
+        android:layout_marginStart="270dp"
         android:layout_marginTop="460dp"
         android:textColor="#45210D"
+        android:textSize="20sp"
         android:text="원"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -103,20 +109,24 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="3" />
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="350dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="430dp"
+                android:layout_marginLeft="30dp"
+                app:srcCompat="@drawable/drawable_dash_line" />
 
             <Button
                 android:id="@+id/button_money"
                 android:layout_width="416dp"
-                android:layout_height="10dp"
-                android:layout_marginTop="500dp"
-                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:layout_marginTop="250dp"
                 android:background="#F2B089"
                 android:text="확인"
-                android:textColor="#D75509" />
+                android:textColor="#D75509"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 
