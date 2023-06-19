@@ -54,6 +54,8 @@ public class BistroMoneyActivity extends AppCompatActivity {
         //리사이클러뷰 api 통신
         retrofitClient = RetrofitClient.getInstance();
         serviceApi = RetrofitClient.getRetrofitInterface();
+        TextView today_revenue = findViewById(R.id.today_revenue);
+        TextView total_revenue = findViewById(R.id.total_revenue);
 
         serviceApi.getBistro4(1).enqueue(new Callback<Result>() {
             @Override
@@ -61,8 +63,8 @@ public class BistroMoneyActivity extends AppCompatActivity {
                 Result result = response.body();
                 Data data = result.getData();
                 Log.d("retrofit", "Data fetch success");
-                TextView today_revenue = findViewById(R.id.today_revenue);
-                TextView total_revenue = findViewById(R.id.total_revenue);
+                today_revenue.setText(data.getToday_total_revenue());
+                total_revenue.setText(data.getTotal_revenue());
             }
 
             @Override

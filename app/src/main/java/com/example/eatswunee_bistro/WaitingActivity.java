@@ -63,13 +63,21 @@ public class WaitingActivity extends AppCompatActivity {
         retrofitClient = RetrofitClient.getInstance();
         serviceApi = RetrofitClient.getRetrofitInterface();
 
-        serviceApi.getBistro(1).enqueue(new Callback<Result>() {
+        serviceApi.getBistro("1").enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
                 Result result = response.body();
                 Data data = result.getData();
                 Log.d("retrofit", "Data success");
                 customAdapter = new CustomAdapter(data.getOrdersList());
+                customAdapter.setOnItemClickListener(new CustomAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int pos) {
+                        Intent intent = new Intent (WaitingActivity.this, BistroOrderActivity.class);
+                        intent.putExtra("SelectedItem", pos);
+                        launcher.launch(intent);
+                    }
+                });
                 recyclerView.setAdapter(customAdapter);
             }
 
@@ -95,14 +103,7 @@ public class WaitingActivity extends AppCompatActivity {
         //CustomAdapter adapter1 = new CustomAdapter(list);
         //커스텀 리스너 객체 생성 및 전달
         //클릭 이벤트
-        customAdapter.setOnItemClickListener(new CustomAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int pos) {
-                Intent intent = new Intent (WaitingActivity.this, BistroOrderActivity.class);
-                intent.putExtra("SelectedItem", pos);
-                launcher.launch(intent);
-            }
-        });
+
     }
 
     //launcher 선언

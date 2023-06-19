@@ -121,7 +121,7 @@
                 android:id="@+id/button_money"
                 android:layout_width="416dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="250dp"
+                android:layout_marginTop="210dp"
                 android:background="#F2B089"
                 android:text="확인"
                 android:textColor="#D75509"

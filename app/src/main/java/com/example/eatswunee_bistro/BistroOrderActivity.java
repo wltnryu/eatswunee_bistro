@@ -48,16 +48,31 @@ public class BistroOrderActivity extends AppCompatActivity {
         //리사이클러뷰 api 통신
         retrofitClient = RetrofitClient.getInstance();
         serviceApi = RetrofitClient.getRetrofitInterface();
+        //TextView order_id = findViewById(R.id.order_id);
+        TextView order_num = findViewById(R.id.order_num);
+        TextView menu_name = findViewById(R.id.menu_name);
+        TextView menu_cnt = findViewById(R.id.menu_cnt);
 
-        serviceApi.getBistro2(2).enqueue(new Callback<Result>() {
+        //orderid 선언
+        String temp = getIntent().getStringExtra("order_id");
+
+        serviceApi.getBistro2(Integer.parseInt(temp)).enqueue(new Callback<Result>() {
+//        serviceApi.getBistro2(1).enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
                 Result result = response.body();
                 Data data = result.getData();
                 Log.d("retrofit", "Data fetch success");
-                TextView menuName = findViewById(R.id.menu_name);
-                TextView menuCnt = findViewById(R.id.menu_cnt);
-                TextView orderNum = findViewById(R.id.order_num);
+                order_num.setText(data.getOrder_num());
+                String Total = "";
+                String Totalnum = "";
+                for(int i = 0; i<data.getMenusList().size(); i++){
+                    Total += data.getMenusList().get(i).getMenuName() + '\n';
+                    Totalnum += data.getMenusList().get(i).getMenuCnt() + '\n';
+                }
+                menu_name.setText(Total);
+                menu_cnt.setText(Totalnum);
+
             }
 
             @Override

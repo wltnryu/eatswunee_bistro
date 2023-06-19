@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BistroDoneAdapter extends RecyclerView.Adapter<BistroDoneAdapter.ViewHolder> {
-    private List<orders> items;
+    private List<orders> ordersList;
 
-    public BistroDoneAdapter(List<orders> items) {this.items = items;}
+    public BistroDoneAdapter(List<orders> items) {this.ordersList = items;}
 
     //아이템 뷰를 저장하는 뷰 홀더 클래스
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -36,12 +36,18 @@ public class BistroDoneAdapter extends RecyclerView.Adapter<BistroDoneAdapter.Vi
             menu_name = itemView.findViewById(R.id.menu_name);
             menu_cnt = itemView.findViewById(R.id.menu_cnt);
 
-            itemView.setOnClickListener((View.OnClickListener) this);
+            //itemView.setOnClickListener((View.OnClickListener) this);
         }
         //api 통신
         public void setItem(orders item) {
-            menu_name.setText(item.getMenuName());
-            menu_cnt.setText(item.getMenuCnt());
+            order_num.setText(item.getOrderNum());
+            menu_name.setText(item.getmenusList().get(0).getMenuName());
+            //0+1
+            int total_cnt = 0;
+            for( int i = 0; i<item.getmenusList().size();i++){
+                total_cnt += Integer.parseInt(item.getmenusList().get(i).getMenuCnt());
+            }
+            menu_cnt.setText(Integer.toString(total_cnt));
         }
     }
 
@@ -60,7 +66,7 @@ public class BistroDoneAdapter extends RecyclerView.Adapter<BistroDoneAdapter.Vi
         //onBindViewHolder - position에 해당하는 데이터를 뷰 홀더의 아이템뷰에 표시
         @Override
         public void onBindViewHolder(BistroDoneAdapter.ViewHolder holder, int position) {
-            orders item = items.get(position);
+            orders item = ordersList.get(position);
             holder.setItem(item);
 
             holder.serviceItemClickListener = new CustomAdapter.ServiceItemClickListener() {
@@ -75,7 +81,10 @@ public class BistroDoneAdapter extends RecyclerView.Adapter<BistroDoneAdapter.Vi
         //getItemCount 전체 데이터 개수 리턴
         @Override
         public int getItemCount() {
-            return items.size();
+
+                return ordersList.size();
+
+
         }
 
         //커스텀 리스너 인터페이스

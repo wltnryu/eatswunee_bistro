@@ -1,5 +1,7 @@
 package com.example.eatswunee_bistro;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +26,7 @@ import com.example.eatswunee_bistro.api.Data;
 import com.example.eatswunee_bistro.api.Result;
 import com.example.eatswunee_bistro.api.RetrofitClient;
 import com.example.eatswunee_bistro.api.ServiceApi;
+import com.example.eatswunee_bistro.api.Notification;
 
 import java.util.ArrayList;
 
@@ -62,16 +65,31 @@ public class BistroAlarmActivity extends AppCompatActivity {
         //리사이클러뷰 api 통신
         retrofitClient = RetrofitClient.getInstance();
         serviceApi = RetrofitClient.getRetrofitInterface();
-
-        serviceApi.getBistro3(1).enqueue(new Callback<Result>() {
+        Call<Result> call = serviceApi.getBistro3("1");
+        Data data = new Data();
+        alarmAdapter = new AlarmAdapter(data.getNotifications());
+        call.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
-                Result result = response.body();
-                Data data = result.getData();
-                Log.d("retrofit", "Data fetch success");
-                alarmAdapter = new AlarmAdapter(data.getOrdersList());
+                if (response.isSuccessful()) {
+                    Log.e(TAG, "isSuccessful() : " + response.body());
+                    Result result = response.body();
+                    Data data = result.getData();
+                    Log.d("retrofit", "Data fetch success");
+                    alarmAdapter = new AlarmAdapter(data.getNotifications());
+                    alarmAdapter.setOnItemClickListener(new AlarmAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View v, int pos) {
+                            Intent intent = new Intent (BistroAlarmActivity.this, BistroOrderActivity.class);
+                            intent.putExtra("SelectedItem", pos);
+                            launcher.launch(intent);
+                        }
+                    });
+                    recyclerView.setAdapter(alarmAdapter);
+                } else {
+                    Log.e(TAG, "isSuccessful()이 아님 : " + response.body());
+                }
 
-                recyclerView.setAdapter(alarmAdapter);
             }
 
             @Override

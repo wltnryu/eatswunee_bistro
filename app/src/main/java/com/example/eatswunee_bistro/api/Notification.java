@@ -1,14 +1,9 @@
 package com.example.eatswunee_bistro.api;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-//import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-
-public class orders {
+public class Notification {
 
     @SerializedName("order_id")
     @Expose
@@ -16,20 +11,16 @@ public class orders {
     @SerializedName("order_num")
     @Expose
     private String orderNum;
-    @SerializedName("menus")
+    @SerializedName("order_title_menu")
     @Expose
-    private List<menus> menus;
-    @SerializedName("menu_name")
+    private String orderTitleMenu;
+    @SerializedName("order_etc_menu_cnt")
     @Expose
-    private String menuName;
-    @SerializedName("menu_cnt")
-    @Expose
-    private String menuCnt;
+    private String orderEtcMenuCnt;
     @SerializedName("order_created_at")
     @Expose
     private String orderCreatedAt;
 
-    public orders(){return;}
     public String getOrderId() {
         return orderId;
     }
@@ -46,20 +37,20 @@ public class orders {
         this.orderNum = orderNum;
     }
 
-    public String getMenuName() {
-        return menuName;
+    public String getOrderTitleMenu() {
+        return orderTitleMenu;
     }
 
-    public void setMenuName(String menuName) {
-        this.menuName = menuName;
+    public void setOrderTitleMenu(String orderTitleMenu) {
+        this.orderTitleMenu = orderTitleMenu;
     }
 
-    public String getMenuCnt() {
-        return menuCnt;
+    public String getOrderEtcMenuCnt() {
+        return orderEtcMenuCnt;
     }
 
-    public void setMenuCnt(String menuCnt) {
-        this.menuCnt = menuCnt;
+    public void setOrderEtcMenuCnt(String orderEtcMenuCnt) {
+        this.orderEtcMenuCnt = orderEtcMenuCnt;
     }
 
     public String getOrderCreatedAt() {
@@ -68,14 +59,6 @@ public class orders {
 
     public void setOrderCreatedAt(String orderCreatedAt) {
         this.orderCreatedAt = orderCreatedAt;
-    }
-
-    public List<menus> getmenusList() {
-        return menus;
-    }
-
-    public void setmenusList(List<menus> menus) {
-        this.menus = menus;
     }
 
 }

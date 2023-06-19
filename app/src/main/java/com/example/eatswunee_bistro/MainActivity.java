@@ -1,5 +1,7 @@
 package com.example.eatswunee_bistro;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -21,6 +23,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 //import android.widget.Toolbar;
 import androidx.appcompat.widget.Toolbar;
 
@@ -30,10 +33,12 @@ import com.example.eatswunee_bistro.api.Example;
 import com.example.eatswunee_bistro.api.Result;
 import com.example.eatswunee_bistro.api.RetrofitClient;
 import com.example.eatswunee_bistro.api.ServiceApi;
+import com.example.eatswunee_bistro.api.orders;
 import com.google.android.material.navigation.NavigationView;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,16 +71,34 @@ public class MainActivity extends AppCompatActivity {
         //리사이클러뷰 api 통신
         retrofitClient = RetrofitClient.getInstance();
         serviceApi = RetrofitClient.getRetrofitInterface();
-
-        serviceApi.getBistro(1).enqueue(new Callback<Result>() {
+        Call<Result> call = serviceApi.getBistro("1");
+        Data data = new Data();
+        customAdapter = new CustomAdapter(data.getOrdersList());
+        call.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
-                Result result = response.body();
-                Data data = result.getData();
-                Log.d("retrofit", "Data fetch success");
-                customAdapter = new CustomAdapter(data.getOrdersList());
+                if (response.isSuccessful()) {
+                    Log.e(TAG, "isSuccessful() : " + response.body());
+                    Result result = response.body();
+                    Data data = result.getData();
+                    Log.d("retrofit", "Data fetch success");
+                    customAdapter = new CustomAdapter(data.getOrdersList());
+                    customAdapter.setOnItemClickListener(new CustomAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View v, int pos) {
+                            //이런식으로 해야하는데 지금 orderId 못불러오는 중
+                            String orderId = data.getOrdersList().get(pos).getOrderId();
 
-                recyclerView.setAdapter(customAdapter);
+                            Intent intent = new Intent (MainActivity.this, BistroOrderActivity.class);
+                            intent.putExtra("order_id", "1");
+                            launcher.launch(intent);
+                        }
+                    });
+                    recyclerView.setAdapter(customAdapter);
+                } else {
+                    Log.e(TAG, "isSuccessful()이 아님 : " + response.body());
+                }
+
             }
 
             @Override
@@ -103,14 +126,9 @@ public class MainActivity extends AppCompatActivity {
         //CustomAdapter adapter1 = new CustomAdapter(list);
         //커스텀 리스너 객체 생성 및 전달
         //클릭 이벤트
-//        customAdapter.setOnItemClickListener(new CustomAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View v, int pos) {
-//                Intent intent = new Intent (MainActivity.this, BistroOrderActivity.class);
-//                intent.putExtra("SelectedItem", pos);
-//                launcher.launch(intent);
-//            }
-//        });
+
+
+//        recyclerView.setAdapter(customAdapter);
     }
 
 
@@ -173,6 +191,29 @@ public class MainActivity extends AppCompatActivity {
         // 사이드 네브바 구현
         DrawerLayout drawLayout = (DrawerLayout) findViewById(R.id.drawer);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
+        View headerView = navigationView.getHeaderView(0);
+        TextView navUsername = (TextView) headerView.findViewById(R.id.rest_name);
+        //네브바 헤더 이름 바꾸기
+        //리사이클러뷰 api 통신
+        retrofitClient = RetrofitClient.getInstance();
+        serviceApi = RetrofitClient.getRetrofitInterface();
+
+        //헤더 식당 이름 api
+        serviceApi.getBistro5(1).enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                Result result = response.body();
+                Data data = result.getData();
+                Log.d("retrofit", "HeaderActivity");
+                navUsername.setText(data.getRestaurant_name());
+            }
+
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                Log.d("retrofit", t.getMessage());
+            }
+        });
+
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 MainActivity.this,

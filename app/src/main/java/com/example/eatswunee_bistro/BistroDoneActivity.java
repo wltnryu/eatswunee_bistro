@@ -56,13 +56,15 @@ public class BistroDoneActivity extends AppCompatActivity {
         retrofitClient = RetrofitClient.getInstance();
         serviceApi = RetrofitClient.getRetrofitInterface();
 
-        serviceApi.getBistro1(1).enqueue(new Callback<Result>() {
+        serviceApi.getBistro1("1").enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
                 Result result = response.body();
                 Data data = result.getData();
                 Log.d("retrofit", "Data success");
                 bistroDoneAdapter = new BistroDoneAdapter(data.getOrdersList());
+                Log.d("retrofit", Integer.toString( bistroDoneAdapter.getItemCount()));
+
                 recyclerView.setAdapter(bistroDoneAdapter);
             }
 

@@ -7,41 +7,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.eatswunee_bistro.api.menus;
-import com.example.eatswunee_bistro.api.orders;
-
-import org.w3c.dom.Text;
+import com.example.eatswunee_bistro.api.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> {
-    private List<orders> items;
+    private List<Notification> items;
+    private ArrayList<String> list;
 
-    public AlarmAdapter(List<orders> items) {this.items = items;}
+    public AlarmAdapter(List<Notification> items) {this.items = items;}
 
     //아이템 뷰를 저장하는 뷰 홀더 클래스
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView order_num, menu_name, menu_cnt;
+        private TextView order_num, order_title_menu, order_etc_menu_cnt;
         AlarmAdapter.ServiceItemClickListener serviceItemClickListener;
 
         ViewHolder(View itemView) {
             super(itemView);
 
             //뷰 객체에 대한 참조
-            order_num = itemView.findViewById(R.id.order_num);
-            menu_name = itemView.findViewById(R.id.menu_name);
-            menu_cnt = itemView.findViewById(R.id.menu_cnt);
+            order_num = itemView.findViewById(R.id.bistro_num);
+            order_title_menu = itemView.findViewById(R.id.menu_name);
+            order_etc_menu_cnt = itemView.findViewById(R.id.menu_num);
 
-            itemView.setOnClickListener((View.OnClickListener) this);
+            //itemView.setOnClickListener((View.OnClickListener) this);
         }
         //api 통신
-        public void setItem(orders item) {
-            menu_name.setText(item.getMenuName());
-            menu_cnt.setText(item.getMenuCnt());
+        public void setItem(Notification item) {
+            order_num.setText(item.getOrderNum());
+            order_title_menu.setText(item.getOrderTitleMenu());
+            order_etc_menu_cnt.setText(item.getOrderEtcMenuCnt());
         }
     }
 
@@ -51,7 +48,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.recyclerview_item, parent, false);
+        View view = inflater.inflate(R.layout.recyclerview_alarm, parent, false);
         AlarmAdapter.ViewHolder vh = new AlarmAdapter.ViewHolder(view);
 
         return vh;
@@ -60,7 +57,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
     //onBindViewHolder - position에 해당하는 데이터를 뷰 홀더의 아이템뷰에 표시
     @Override
     public void onBindViewHolder(AlarmAdapter.ViewHolder holder, int position) {
-        orders item = items.get(position);
+        Notification item = items.get(position);
         holder.setItem(item);
 
        holder.serviceItemClickListener = new ServiceItemClickListener() {

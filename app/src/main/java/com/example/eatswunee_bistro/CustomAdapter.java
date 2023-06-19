@@ -17,6 +17,7 @@ import java.util.List;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     private List<orders> ordersList;
+    private ArrayList<String> list;
 
     public CustomAdapter(List<orders> ordersList) {this.ordersList = ordersList;}
 
@@ -72,7 +73,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             menu_name = itemView.findViewById(R.id.menu_name);
             menu_cnt = itemView.findViewById(R.id.menu_cnt);
 
-            itemView.setOnClickListener((View.OnClickListener) this);
+            //itemView.setOnClickListener((View.OnClickListener) this);//문제인 부문
 
             //추가내용
             itemView.setOnClickListener(new View.OnClickListener() {
